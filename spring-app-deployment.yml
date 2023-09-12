@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: meuapp-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: meuapp
+  template:
+    metadata:
+      labels:
+        app: meuapp
+    spec:
+      containers:
+        - name: meuapp
+          image: wilsondosreis/minhaaplicacao
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://postgres-service:5432/postgres
+            - name: SPRING_DATASOURCE_USERNAME
+              value: postgres
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: postgres
+              
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: meuapp-service
+spec:
+  selector:
+    app: meuapp
+  ports:
+    - name: "8080"
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP   
+                

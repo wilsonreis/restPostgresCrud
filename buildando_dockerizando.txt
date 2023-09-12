@@ -1,0 +1,181 @@
+PASSO A PASSO DO Dockerfile ao Kubernetes
+1 - Iniciar o Docker Desktop
+2 - Settings, Start Docker Desktop when you log in, Apply & restart
+3 -
+Dockerfile
+FROM openjdk:17-jdk-alpine
+EXPOSE 8080
+ARG JAR_FILE=target/*.jar
+ADD ${JAR_FILE} application.jar
+ENTRYPOINT ["java","-jar","/application.jar"]
+
+4 - docker network create minha-rede
+6 - Aplicação
+DockerfileApplication
+FROM openjdk:17-jdk-alpine
+EXPOSE 8080
+ENV POSTGRES_PASSWORD=postgres
+ENV POSTGRES_DB=postgres
+ENV POSTGRES_USER=postgres
+ARG JAR_FILE=target/*.jar
+ADD ${JAR_FILE} application.jar
+ENTRYPOINT ["java","-jar","/application.jar"]
+
+7 - construção da aplicação customizada
+docker build -t wilsondosreis/minhaaplicacao -f DockerfileApplication .
+docker push wilsondosreis/minhaaplicacao
+
+docker run -d \
+--name meu-app \
+--network minha-rede \
+-e spring.datasource.url=jdbc:postgresql://meu-postgres:5432/postgres \
+-e spring.datasource.username=postgres \
+-e spring.datasource.password=postgres \
+-p 8080:8080 \
+wilsondosreis/minhaaplicacao
+
+
+6 - Transforme o comando abaixo em :
+1 - Construa um Dockerfile chamado DockerfileApplication
+2 - Construa o comando docker build para execução do DockerfileApplication
+
+docker build -t wilsondosreis/minhaaplicacao .
+
+docker run -d \
+--name meu-app \
+--network minha-rede \
+-e spring.datasource.url=jdbc:postgresql://meu-postgres:5432/postgres \
+-e spring.datasource.username=postgres \
+-e spring.datasource.password=postgres \
+-p 8080:8080 \
+wilsondosreis/minhaaplicacao
+
+
+
+
+
+
+docker run -d --name meu-postgres --network minha-rede -e POSTGRES_PASSWORD=postgres -p 5432:5432 postgres:15.3
+
+crio uma imagem local customizada para mim, com rede e variáveis de ambiente
+docker run -d \
+--name meu-postgres \
+--network minha-rede \
+-e POSTGRES_PASSWORD=postgres \
+-e POSTGRES_DB=postgres \
+-e POSTGRES_USER=postgres \
+-p 5432:5432 postgres:15.3
+
+
+docker run -d \
+--name meu-app \
+--network minha-rede \
+-e spring.datasource.url=jdbc:postgresql://meu-postgres:5432/postgres \
+-e spring.datasource.username=postgres \
+-e spring.datasource.password=postgres \
+-p 8080:8080 \
+wilsondosreis/meuapp
+
+
+docker run -d --name meu-app --network minha-rede -e spring.datasource.url=jdbc:postgresql://
+meu-postgres:5432/postgres -e spring.datasource.username=postgres -e spring.datasource.password=postgres -p 8080:8080 wilsondosreis/meuapp
+
+
+docker run -d --name meu-app --network minha-rede -e spring.datasource.url=jdbc:postgresql://
+meu-postgres:5432/postgres -e spring.datasource.username=postgres -e spring.datasource.password=postgres -p 8080:8080 wilsondos
+reis/meuapp
+
+
+vou tentar fazer um Dockerfile com argumentos dentro dele
+# syntax=docker/dockerfile:1
+FROM alpine
+ENV ADMIN_USER="mark"
+RUN echo $ADMIN_USER > ./mark
+RUN unset ADMIN_USER
+
+docker build -t wilsondosreis/meuapp:latest .
+
+docker build --build-arg var_name=${VARIABLE_NAME} (... rest of command)
+
+//exemplo
+docker build \
+-t essearch/ess-elasticsearch:1.7.6 \
+--build-arg number_of_shards=5 \
+--build-arg number_of_replicas=2 \
+--no-cache .
+
+docker run -d --name meu-app --network minha-rede -e spring.datasource.url=jdbc:postgresql://
+meu-postgres:5432/postgres -e spring.datasource.username=postgres -e spring.datasource.password=postgres -p 8080:8080 wilsondos
+reis/meuapp
+
+docker build --build-arg var_name=${VARIABLE_NAME} (... rest of command)
+
+docker push wilsondosreis/meuapp
+
+
+docker run -p 8080:8080 wilsondosreis/meuapp
+
+
+docker run -d --name meu-postgres --network minha-rede -e POSTGRES_PASSWORD=postgres -p 5432:5432 postgres:15.3
+
+
+docker run -d --name meu-app --network minha-rede -p 8080:8080 wilsondosreis/meuapp
+docker run -d --name meu-app --network minha-rede -e spring.datasource.url=jdbc:postgresql://meu-postgres:5432/postgres -e spring.datasource.username=postgres -e spring.datasource.password=postgres -p 8080:8080 wilsondosreis/meuapp
+
+
+docker run -d --name meu-app --network minha-rede -e spring.datasource.url=jdbc:postgresql://
+meu-postgres:5432/postgres -e spring.datasource.username=postgres -e spring.datasource.password=postgres -p 8080:8080 wilsondosreis/meuapp
+
+
+
+docker run -d -t -i 
+-e POSTGRES_ENV_POSTGRES_PASSWORD='postgres' \
+-e POSTGRES_ENV_POSTGRES_USER='postgres' \
+-e POSTGRES_ENV_DB_NAME='postgres' \
+-e POSTGRES_PORT_5432_TCP_ADDR='docker-db-1.hidden.us-east-1.rds.amazonaws.com' \
+-e SITE_URL='staging.mysite.com' \
+-p 80:80 \
+--link redis:redis \  
+--name container_name dockerhub_id/image_name
+
+
+docker network create minha-rede
+
+docker run -d --name meu-postgres --network minha-rede -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=nome_do_banco -e POSTGRES_USER=postgres -p 5432:5432 postgres:15.3
+
+docker run -d --name meu-app --network minha-rede -p 8080:8080 wilsondosreis/meuapp
+
+docker ps
+
+docker ps -a
+docker ps -q
+docker ps -aq
+docker ps -a --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Ports}}"
+
+docker rm charming_bhabha
+
+docker network ls
+
+
+
+
+----
+DockerfilePostgres
+# Use a imagem base do PostgreSQL
+FROM postgres:15.3
+
+# Define as variáveis de ambiente para o PostgreSQL
+ENV POSTGRES_PASSWORD=postgres
+ENV POSTGRES_DB=postgres
+ENV POSTGRES_USER=postgres
+
+# Exponha a porta padrão do PostgreSQL
+EXPOSE 5432
+
+
+docker build -f DockerfilePostgres -t meu-postgres-custom .
+
+docker run -d --name meu-postgres --network minha-rede -p 5432:5432 meu-postgres-custom
+
+
+
